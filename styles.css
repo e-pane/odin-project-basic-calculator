@@ -43,6 +43,11 @@ body {
     font-weight: 400;
     font-size: 4em;
 }
+
+.upper-display {
+    font-weight: 200;
+    font-size: 2em;
+}
 .btn-grid {
     width: 90%; 
     display: flex;

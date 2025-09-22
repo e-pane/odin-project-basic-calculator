@@ -29,14 +29,23 @@ const upperDisplay = document.querySelector('.upper-display');
 
 const btnGrid = document.querySelector('.btn-grid');
 let calcArray = [];
+let resetOnNextKey = false;
+
+
 
 // handle click for numbers and operators, display user input and build an array //
 btnGrid.addEventListener('click', (e) => {
     const clickedElement = e.target;
     if (clickedElement.tagName === 'BUTTON') {
         const value = clickedElement.dataset.value;
-        if (value !== "clear" && value != "=") {
 
+        if (resetOnNextKey && value !== "clear" && value !== "=") {
+            lowerDisplay.innerText = "";
+            calcArray = [];
+            resetOnNextKey= false;
+        }
+
+        if (value !== "clear" && value !== "=") {
             if (calcArray.length > 0 && calcArray[calcArray.length - 1] === "+" && value === "-") {
                 calcArray[calcArray.length - 1] = "-";
                 lowerDisplay.innerText = lowerDisplay.innerText.slice(0, -1) + value;
@@ -50,10 +59,45 @@ btnGrid.addEventListener('click', (e) => {
         else if (value === "=") {
             const transformedArray = transformInput(calcArray);
             console.log(transformedArray);
+
+            if (transformedArray.length === 3) {
+                const myCalc = new Calc(...transformedArray);
+
+                const operations = {
+                    "+": () => myCalc.add(),
+                    "-": () => myCalc.subtract(),
+                    "*": () => myCalc.multiply(),
+                    "/": () => myCalc.divide()
+                }
+
+                const operator = transformedArray[1];
+                const operation = operations[operator];
+
+                if(operation) {
+                    const answer = operation();
+                    if (answer % 1 !== 0) {
+                        answer = parseFloat(answer.toFixed(3));
+                    }
+                    updateDisplays(answer);
+                }
+                else {
+                    console.error(`Invalid operator: "${operator}"`);
+                    updateDisplays("ERROR");
+                }
+            }
+            else {
+                updateDisplays("ERROR");
+            }
         }       
     }
 });
 
+function updateDisplays(answer) {
+    upperDisplay.innerText = lowerDisplay.innerText;
+    lowerDisplay.innerText = "";
+    lowerDisplay.innerText = answer;
+    resetOnNextKey = true;
+}
 // array methods to get "left int, operator, right int" [-9, -, 8] [29, +, 987] [45, +, -8]
 function transformInput(sequence) {
     let output = [];
@@ -90,4 +134,3 @@ function transformInput(sequence) {
     }
     return output;
 }
-
