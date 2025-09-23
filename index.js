@@ -20,8 +20,15 @@ class Calc {
         return this.left / this.right;
     }
 
-    _validate() {
-        
+    _validate(left, operator, right) {
+        if (typeof left !== "number" || typeof right !== "number") {
+            updateDisplays("ERROR");
+            throw new Error ("Left and right operands must be numbers.");
+        }
+        if (!["+","-","*","/"].includes(operator)) {
+            updateDisplays("ERROR");
+            throw new Error ("operator is invalid")
+        }
     }
 }
 const lowerDisplay = document.querySelector('.lower-display');
@@ -74,7 +81,7 @@ btnGrid.addEventListener('click', (e) => {
                 const operation = operations[operator];
 
                 if(operation) {
-                    const answer = operation();
+                    let answer = operation();
                     if (answer % 1 !== 0) {
                         answer = parseFloat(answer.toFixed(3));
                     }
@@ -88,7 +95,12 @@ btnGrid.addEventListener('click', (e) => {
             else {
                 updateDisplays("ERROR");
             }
-        }       
+        } else if (value === "clear") {
+            upperDisplay.innerText = "";
+            lowerDisplay.innerText = "";
+            calcArray = [];
+            resetOnNextKey = false;
+        }    
     }
 });
 
@@ -106,7 +118,7 @@ function transformInput(sequence) {
     for (let i = 0; i < sequence.length; i++) {
         item = sequence[i];
         // If the item is a digit, append it to currentNum
-        if (!isNaN(item)) {
+        if (!isNaN(item) || item === ".") {
             currentNum += item;
         }
         // If we hit a non-digit (operator), flush currentNum to output

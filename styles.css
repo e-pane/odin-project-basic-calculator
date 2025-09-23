@@ -18,8 +18,8 @@ body {
 }
 
 .calculator .display-container {
-    width: 75%;              /* 3/4 width */
-    height: 120px;            /* fixed height for display */
+    width: 75%;             
+    height: 120px;            
     margin-top: 1rem;
     margin-bottom: 1rem;
     border: 2px solid #555;
@@ -29,7 +29,7 @@ body {
     font-family: monospace;
     display: flex;
     flex-direction: column;
-    align-items: center;     /* center text vertically */
+    align-items: center;     
     padding: 0 1rem;
 }
 
@@ -51,8 +51,14 @@ body {
 .btn-grid {
     width: 90%; 
     display: flex;
-    flex-wrap: wrap;   /* wrap into rows */
-    gap: 4px;          /* tiny gap */
+    flex-wrap: wrap;   
+    gap: 4px;          
+}
+
+.btn-grid button.clear {
+  flex: 0 0 50%;     
+  height: 100px;
+  margin: 0 auto;
 }
 
 .btn-grid button {
