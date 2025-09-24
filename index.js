@@ -23,11 +23,15 @@ class Calc {
     _validate(left, operator, right) {
         if (typeof left !== "number" || typeof right !== "number") {
             updateDisplays("ERROR");
-            throw new Error ("Left and right operands must be numbers.");
+            throw new Error ("Left and right operands must be numbers");
         }
         if (!["+","-","*","/"].includes(operator)) {
             updateDisplays("ERROR");
-            throw new Error ("operator is invalid")
+            throw new Error ("operator is invalid");
+        }
+        if (operator === "/" && right === 0) {
+            updateDisplays("ERROR");
+            throw new Error ("Cannot divide by zero");
         }
     }
 }
